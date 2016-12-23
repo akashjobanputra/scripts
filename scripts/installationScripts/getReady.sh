@@ -10,5 +10,5 @@ fi
 sudo apt-get update && apt-get -y install screen hexchat
 cd /opt/
 wget -c http://sourceforge.net/projects/xdman/files/xdm-jre-32bit.tar.xz
-tar -xvf xdm-*.tar.xz
+tar -xvf xdm-jre-32bit.tar.xz
 ln -s /usr/bin/xdman /opt/xdm/xdm
