@@ -1,2 +1,2 @@
-# enggCollege
-All (or most) scripts and assignments created while being at college.
+# scripts
+Scripts created to automate some task needed repetitively.
