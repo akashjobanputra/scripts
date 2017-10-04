@@ -1,6 +1,6 @@
 #/bin/bash
-mkdir opencv_3
-cd opencv_3
+mkdir ~/opencv_3
+cd ~/opencv_3
 echo "Downloading installation files..."
 git clone https://gist.github.com/8dc0c4d7a96ffc72ac7885123f53f7e6.git
 cd 8dc0c4d7a96ffc72ac7885123f53f7e6/
