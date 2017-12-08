@@ -9,7 +9,7 @@ class WebcamVideoStream:
         # from the stream
         self.frame = None
         self.src = src
-        if src == 'picam' and self.checkIfRaspberryPi():
+        if src == 'picam' and checkIfRaspberryPi():
             from picamera.array import PiRGBArray
             from picamera import PiCamera
             self.stream = PiCamera()
@@ -17,7 +17,11 @@ class WebcamVideoStream:
             self.stream.resolution = (width, height)
             self.rawCapture = PiRGBArray(self.stream, size=(width, height))
         elif src != 'picam':
-            self.stream = cv2.VideoCapture(src)
+            if src.isdigit():
+                self.stream = cv2.VideoCapture(int(self.src))
+            else:
+                self.stream = cv2.VideoCapture(self.src)
+            assert self.stream.isOpened(), 'Cannot capture WebCam source'
             self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, width)
             self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
             (self.grabbed, self.frame) = self.stream.read()
@@ -29,14 +33,14 @@ class WebcamVideoStream:
         self.stopped = False
         self._stop = False
 
-    def start(self):
+    def start(self) -> object:
         # start the thread to read frames from the video stream
-        Thread(target=self.update, args=()).start()
+        threading.Thread(target=self.update, args=()).start()
         return self
 
     def update(self):
         # keep looping infinitely until the thread is stopped
-        if self.src == 'picam' and self.checkIfRaspberryPi():
+        if self.src == 'picam' and checkIfRaspberryPi():
             sleep(0.5)
             for image in self.stream.capture_continuous(self.rawCapture, format='bgr', use_video_port=True):
                 if self._stop:
@@ -65,7 +69,7 @@ class WebcamVideoStream:
         # return the frame most recently read
         while self.frame is None:
             pass
-        return self.frame
+        return self.grabbed, self.frame
 
     def stop(self):
         # indicate that the thread should be stopped
@@ -80,7 +84,8 @@ class WebcamVideoStream:
         else:
             self.stream.release()
 
-    def checkIfRaspberryPi(self):
-        if hex(get_mac())[2:6] == 'b827':
-            return True
-        return False
+            
+def checkIfRaspberryPi():
+    if hex(get_mac())[2:6] == 'b827':
+        return True
+    return False
