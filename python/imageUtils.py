@@ -6,7 +6,7 @@ import colorsys
 import scipy
 import scipy.misc
 import scipy.cluster
-import Configuration as cfg
+# import Configuration as cfg
 import os
 import PIL.ImageOps
 import datetime, time
